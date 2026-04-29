@@ -176,14 +176,13 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-dark-bg/80 backdrop-blur-md border-b border-white/10 py-4" : "bg-transparent py-6"}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           <img 
-            src="https://picsum.photos/seed/kiromics-logo/200/200" 
-            alt="KAIROMICS Logo" 
-            className="w-10 h-10 object-contain mix-blend-screen"
+            src="/logo.png" 
+            alt="KAIROMICS" 
+            className="w-[300px] h-[60px] object-contain"
             referrerPolicy="no-referrer"
           />
-          <span className="text-2xl font-bold tracking-tighter text-white">KAIROMICS</span>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
@@ -272,7 +271,7 @@ const Hero = () => {
         >
           <div className="relative mx-auto max-w-5xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-dark-card/50 backdrop-blur-sm p-2">
             <img 
-              src="https://picsum.photos/seed/cancer-ai/1200/600?blur=2" 
+              src="/regenerated_image_1777502077226.png" 
               alt="KAIROMICS Dashboard" 
               className="w-full h-auto rounded-xl opacity-80"
               referrerPolicy="no-referrer"
@@ -728,14 +727,13 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20 mb-20">
           <div>
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center mb-8">
               <img 
-                src="https://picsum.photos/seed/kiromics-logo/200/200" 
-                alt="KAIROMICS Logo" 
-                className="w-10 h-10 object-contain mix-blend-screen"
+                src="/logo.png" 
+                alt="KAIROMICS" 
+                className="w-[300px] h-[60px] object-contain"
                 referrerPolicy="no-referrer"
               />
-              <span className="text-2xl font-bold tracking-tighter text-white">KIROMICS</span>
             </div>
             <p className="text-slate-400 text-lg max-w-md mb-8">
               The future of cancer care is unified, intelligent, and actionable. Join us in pioneering the next era of AI-driven oncology.
@@ -755,11 +753,11 @@ const Footer = () => {
             <div className="space-y-4 mb-8">
               <div className="flex items-center gap-4 text-slate-400">
                 <ChevronRight className="text-brand-blue w-5 h-5" />
-                <span>Email: kiromics@icri.org</span>
+                <span>Email: kairomics@icri.org</span>
               </div>
               <div className="flex items-center gap-4 text-slate-400">
                 <ChevronRight className="text-brand-blue w-5 h-5" />
-                <span>Web: www.icri.org/kiromics</span>
+                <span>Web: www.icri.org/kairomics</span>
               </div>
             </div>
             <button className="w-full py-4 rounded-xl bg-white text-dark-bg font-bold hover:bg-brand-blue hover:text-white transition-all">
