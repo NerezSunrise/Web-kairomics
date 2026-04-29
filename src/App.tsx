@@ -244,10 +244,10 @@ const Hero = () => {
           transition={{ duration: 0.6 }}
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-brand-blue text-xs font-bold tracking-widest uppercase mb-6">
-            The Future of Cancer Intelligence
+            THE FUTURE OF CANCER PATIENT PATHWAY INTELLIGENCE
           </span>
           <h1 className="text-5xl md:text-8xl font-bold tracking-tight text-white mb-8 leading-[1.1]">
-            Unifying the <span className="gradient-text">Cancer Care</span> <br /> Continuum
+            Unifying the <span className="gradient-text">Cancer Patient Care Pathway</span>
           </h1>
           <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-12 leading-relaxed">
             The world's first end-to-end AI platform that synthesizes every disparate data point into precise, actionable intelligence.
