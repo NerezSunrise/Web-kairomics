@@ -79,9 +79,9 @@ const Chatbot = () => {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 w-14 h-14 bg-linear-to-r from-brand-blue to-brand-purple rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform z-50 ${isOpen ? 'hidden' : 'flex'}`}
+        className={`fixed bottom-6 right-6 w-14 h-14 brand-gradient-bg rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform z-50 ${isOpen ? 'hidden' : 'flex'}`}
       >
-        <MessageSquare className="text-white w-6 h-6" />
+        <MessageSquare className="text-dark-bg w-6 h-6" />
       </button>
 
       <AnimatePresence>
@@ -94,8 +94,8 @@ const Chatbot = () => {
           >
             <div className="p-4 bg-white/5 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-linear-to-br from-brand-blue to-brand-purple rounded-lg flex items-center justify-center">
-                  <Activity className="text-white w-4 h-4" />
+                <div className="w-8 h-8 brand-gradient-br text-dark-bg rounded-lg flex items-center justify-center">
+                  <Activity className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm">KAIROMICS Assistant</h3>
@@ -218,7 +218,7 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
-          <button className="w-full px-5 py-3 rounded-xl bg-linear-to-r from-brand-blue to-brand-purple text-white font-semibold">
+          <button className="w-full px-5 py-3 rounded-xl brand-gradient-bg text-dark-bg font-semibold">
             Get Started
           </button>
         </motion.div>
@@ -228,12 +228,31 @@ const Navbar = () => {
 };
 
 const Hero = () => {
+  const fullText = "Unifying the Cancer Patient Care Pathway";
+  const [displayedText, setDisplayedText] = useState("");
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(fullText.slice(0, index));
+      index++;
+      if (index > fullText.length) {
+        clearInterval(interval);
+      }
+    }, 40); // Fast typing speed
+    return () => clearInterval(interval);
+  }, []);
+
+  const prefix = "Unifying the ";
+  const displayedPrefix = displayedText.slice(0, prefix.length);
+  const displayedHighlight = displayedText.slice(prefix.length);
+
   return (
     <section className="relative pt-32 pb-20 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-blue/20 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-brand-purple/20 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-brand-green/20 blur-[120px] rounded-full" />
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5" />
       </div>
 
@@ -246,14 +265,20 @@ const Hero = () => {
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-brand-blue text-xs font-bold tracking-widest uppercase mb-6">
             THE FUTURE OF CANCER PATIENT PATHWAY INTELLIGENCE
           </span>
-          <h1 className="text-5xl md:text-8xl font-bold tracking-tight text-white mb-8 leading-[1.1]">
-            Unifying the <span className="gradient-text">Cancer Patient Care Pathway</span>
+          <h1 className="text-5xl md:text-8xl font-bold tracking-tight text-white mb-8 leading-[1.1] min-h-[120px] md:min-h-[192px]">
+            {displayedPrefix}
+            {displayedHighlight && <span className="gradient-text">{displayedHighlight}</span>}
+            <motion.span 
+              animate={{ opacity: [1, 0] }}
+              transition={{ repeat: Infinity, duration: 0.8 }}
+              className="inline-block w-[0.1em] h-[1em] bg-white translate-y-[0.1em] ml-1"
+            />
           </h1>
           <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-12 leading-relaxed">
             The world's first end-to-end AI platform that synthesizes every disparate data point into precise, actionable intelligence.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-linear-to-r from-brand-blue to-brand-purple text-white font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group">
+            <button className="w-full sm:w-auto px-8 py-4 rounded-full brand-gradient-bg text-dark-bg font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group">
               Explore the Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all">
@@ -301,11 +326,11 @@ const Hero = () => {
               <motion.div 
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 5, repeat: Infinity }}
-                className="glass p-4 rounded-2xl border-brand-purple/30 shadow-lg"
+                className="glass p-4 rounded-2xl border-brand-green/30 shadow-lg"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-brand-purple/20 flex items-center justify-center">
-                    <Clock className="text-brand-purple w-5 h-5" />
+                  <div className="w-8 h-8 rounded-lg bg-brand-green/20 flex items-center justify-center">
+                    <Clock className="text-brand-green w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Analysis Time</p>
@@ -393,19 +418,19 @@ const Vision = () => {
               title: "Unified Data Layer",
               desc: "MRI, CT, PET, blood tests, and EMR records ingested and harmonized instantly.",
               icon: Database,
-              color: "from-blue-500 to-cyan-400"
+              color: "from-cyan-400 to-blue-500"
             },
             {
               title: "KAIROMICS AI Engine",
               desc: "Advanced radiomics and deep learning for precise predictive pattern recognition.",
               icon: Cpu,
-              color: "from-purple-500 to-pink-400"
+              color: "from-blue-500 to-emerald-400"
             },
             {
               title: "Clinical Workflow",
               desc: "Screening, diagnosis, treatment, and follow-up delivered in one seamless interface.",
               icon: Stethoscope,
-              color: "from-emerald-500 to-teal-400"
+              color: "from-emerald-400 to-green-500"
             }
           ].map((card, i) => (
             <motion.div
@@ -449,7 +474,7 @@ const Pathway = () => {
 
         <div className="relative">
           {/* Connecting Line */}
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-linear-to-r from-brand-blue/0 via-brand-blue/20 to-brand-purple/0 -translate-y-1/2 hidden lg:block" />
+          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-linear-to-r from-brand-light-blue/0 via-brand-blue/20 to-brand-green/0 -translate-y-1/2 hidden lg:block" />
           
           <div className="grid lg:grid-cols-4 gap-8">
             {steps.map((step, i) => (
@@ -501,10 +526,10 @@ const Technology = () => {
               <motion.div 
                 animate={{ rotate: -360 }}
                 transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-10 border-2 border-dashed border-brand-purple/20 rounded-full" 
+                className="absolute inset-10 border-2 border-dashed border-brand-green/20 rounded-full" 
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-48 h-48 rounded-full bg-linear-to-br from-brand-blue to-brand-purple p-1 shadow-[0_0_50px_rgba(0,210,255,0.3)]">
+                <div className="w-48 h-48 rounded-full brand-gradient-br p-1 shadow-[0_0_50px_rgba(59,130,246,0.3)]">
                   <div className="w-full h-full rounded-full bg-dark-bg flex flex-col items-center justify-center text-center p-4">
                     <Cpu className="text-brand-blue w-10 h-10 mb-2" />
                     <span className="text-white font-bold tracking-tighter">KAIROMICS ENGINE</span>
@@ -542,13 +567,13 @@ const Technology = () => {
                 { title: "Multi-modal Fusion Model", desc: "Integrates imaging features with blood biomarkers, genomics, and clinical data.", icon: Workflow },
                 { title: "Explainable AI (XAI)", desc: "Every prediction comes with clinical interpretation, not just a score.", icon: ShieldCheck }
               ].map((tech, i) => (
-                <div key={i} className="flex gap-6">
-                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
-                    <tech.icon className="text-brand-blue w-6 h-6" />
+                <div key={i} className="flex gap-6 group cursor-pointer p-4 -mx-4 rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:bg-white/5 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] group-hover:border-brand-blue/50 group-hover:scale-110">
+                    <tech.icon className="text-brand-blue w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
                   </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-white mb-2">{tech.title}</h4>
-                    <p className="text-slate-400">{tech.desc}</p>
+                  <div className="transition-all duration-300 group-hover:translate-x-1">
+                    <h4 className="text-xl font-bold text-white mb-2 group-hover:text-brand-light-blue transition-colors">{tech.title}</h4>
+                    <p className="text-slate-400 group-hover:text-slate-300 transition-colors">{tech.desc}</p>
                   </div>
                 </div>
               ))}
@@ -663,10 +688,10 @@ const Market = () => {
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
-                className="absolute w-[40%] h-[40%] rounded-full bg-linear-to-br from-brand-blue to-brand-purple flex flex-col items-center justify-center text-center p-4 shadow-2xl"
+                className="absolute w-[40%] h-[40%] rounded-full brand-gradient-br flex flex-col items-center justify-center text-center p-4 shadow-2xl text-dark-bg"
               >
-                <span className="text-white text-xs font-bold uppercase tracking-widest mb-1">SOM</span>
-                <span className="text-white text-2xl font-bold">$890M</span>
+                <span className="text-xs font-bold uppercase tracking-widest mb-1">SOM</span>
+                <span className="text-2xl font-bold">$890M</span>
               </motion.div>
             </div>
           </div>
@@ -753,7 +778,7 @@ const Footer = () => {
             <div className="space-y-4 mb-8">
               <div className="flex items-center gap-4 text-slate-400">
                 <ChevronRight className="text-brand-blue w-5 h-5" />
-                <span>Email: kairomics@icri.org</span>
+                <span>Email: investors@kairomics.com</span>
               </div>
               <div className="flex items-center gap-4 text-slate-400">
                 <ChevronRight className="text-brand-blue w-5 h-5" />
