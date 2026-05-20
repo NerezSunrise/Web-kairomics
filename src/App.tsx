@@ -228,7 +228,7 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-  const fullText = "Unifying the Cancer Patient Care Pathway";
+  const fullText = "Intelligence in Every Phase of Patient Pathway";
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
@@ -243,7 +243,7 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const prefix = "Unifying the ";
+  const prefix = "Intelligence in Every ";
   const displayedPrefix = displayedText.slice(0, prefix.length);
   const displayedHighlight = displayedText.slice(prefix.length);
 
@@ -782,7 +782,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-4 text-slate-400">
                 <ChevronRight className="text-brand-blue w-5 h-5" />
-                <span>Web: www.icri.org/kairomics</span>
+                <span>Whitepapers</span>
               </div>
             </div>
             <button className="w-full py-4 rounded-xl bg-white text-dark-bg font-bold hover:bg-brand-blue hover:text-white transition-all">
