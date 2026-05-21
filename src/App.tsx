@@ -640,72 +640,13 @@ const Impact = () => {
   );
 };
 
-const Market = () => {
-  return (
-    <section className="py-24 bg-dark-card/30 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
-          <div>
-            <h2 className="text-brand-blue text-sm font-bold tracking-widest uppercase mb-4">Market Opportunity</h2>
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-8">A Massive, Underserved Global Market</h3>
-            <div className="space-y-6">
-              {[
-                "Global cancer incidence rising 1.5% annually",
-                "NHS, EU & US prioritising AI diagnostics",
-                "Radiomics AI market growing at 36.4% CAGR",
-                "Regulatory frameworks providing clear pathways"
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <CheckCircle2 className="text-brand-blue w-5 h-5 shrink-0" />
-                  <p className="text-slate-400 text-lg">{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          <div className="relative flex items-center justify-center">
-            {/* Concentric Circles Visualization */}
-            <div className="relative w-full max-w-md aspect-square flex items-center justify-center">
-              <motion.div 
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                className="absolute w-full h-full rounded-full border border-brand-blue/20 flex items-center justify-center"
-              >
-                <div className="absolute top-4 text-brand-blue text-xs font-bold uppercase tracking-widest">TAM: $45.6B</div>
-              </motion.div>
-              <motion.div 
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="absolute w-[70%] h-[70%] rounded-full border border-brand-blue/40 bg-brand-blue/5 flex items-center justify-center"
-              >
-                <div className="absolute top-4 text-brand-blue text-xs font-bold uppercase tracking-widest">SAM: $12.1B</div>
-              </motion.div>
-              <motion.div 
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-                className="absolute w-[40%] h-[40%] rounded-full brand-gradient-br flex flex-col items-center justify-center text-center p-4 shadow-2xl text-dark-bg"
-              >
-                <span className="text-xs font-bold uppercase tracking-widest mb-1">SOM</span>
-                <span className="text-2xl font-bold">$890M</span>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
 
 const Team = () => {
   const team = [
-    { name: "Mehdi Saberi", role: "Chief Executive Officer", bio: "20+ yrs oncology. Previous NHS Cancer Directorate Lead.", icon: Users },
-    { name: "Shayan Shahzadi", role: "Chief AI Officer", bio: "Deep learning, NLP, radiomics. Ex-DeepMind Health research.", icon: Cpu },
-    { name: "John Makuta", role: "Chief Technology Officer", bio: "ICT Data Analytics, AI integration implementation expert.", icon: Database },
+    { name: "Dr. Mehdi Saberi MBA", role: "Chief Executive Officer", bio: "20+ yrs oncology. Previous NHS Cancer Directorate Lead.", icon: Users },
+    { name: "MSc. Shyan Shahzadi", role: "Chief AI Officer", bio: "Deep learning, NLP, radiomics. Ex-DeepMind Health research.", icon: Cpu },
+    { name: "BSc. John Makuta", role: "Chief Technology Officer", bio: "ICT Data Analytics, AI integration implementation expert.", icon: Database },
     { name: "Dr. Sarah Chen", role: "Medical Lead", bio: "15+ years clinical strategy. Ex-Director of Oncology AI.", icon: Stethoscope },
   ];
 
@@ -747,6 +688,45 @@ const Team = () => {
 };
 
 const Footer = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    organization: "",
+    inquiryType: "Investor Interest",
+  });
+  const [captchaNum1, setCaptchaNum1] = useState(0);
+  const [captchaNum2, setCaptchaNum2] = useState(0);
+  const [userCaptchaAnswer, setUserCaptchaAnswer] = useState("");
+  const [captchaError, setCaptchaError] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const generateCaptcha = () => {
+    setCaptchaNum1(Math.floor(Math.random() * 9) + 1);
+    setCaptchaNum2(Math.floor(Math.random() * 9) + 1);
+    setUserCaptchaAnswer("");
+    setCaptchaError(false);
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (honeypot) {
+      // Quietly ignore bot submissions
+      return;
+    }
+    const answer = parseInt(userCaptchaAnswer.trim(), 10);
+    if (isNaN(answer) || answer !== (captchaNum1 + captchaNum2)) {
+      setCaptchaError(true);
+      return;
+    }
+    setSubmitted(true);
+  };
+
   return (
     <footer className="py-20 border-t border-white/10 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
@@ -773,21 +753,162 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="glass p-10 rounded-3xl">
-            <h4 className="text-2xl font-bold text-white mb-6">Get In Touch</h4>
-            <div className="space-y-4 mb-8">
-              <div className="flex items-center gap-4 text-slate-400">
-                <ChevronRight className="text-brand-blue w-5 h-5" />
-                <span>Email: investors@kairomics.com</span>
-              </div>
-              <div className="flex items-center gap-4 text-slate-400">
-                <ChevronRight className="text-brand-blue w-5 h-5" />
-                <span>Whitepapers</span>
-              </div>
-            </div>
-            <button className="w-full py-4 rounded-xl bg-white text-dark-bg font-bold hover:bg-brand-blue hover:text-white transition-all">
-              Schedule a Demo
-            </button>
+          <div className="glass p-10 rounded-3xl" id="investor-contact-form">
+            {!submitted ? (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <h4 className="text-2xl font-bold text-white mb-2">Enterprise Inquiry</h4>
+                  <p className="text-slate-400 text-sm">
+                    Directing inquiries to <span className="text-brand-blue font-semibold">info@kairomics.com</span>. Our partnerships advisor will respond within 24 hours.
+                  </p>
+                </div>
+
+                {/* Honeypot field for bot spam protection */}
+                <div className="hidden" aria-hidden="true">
+                  <input
+                    type="text"
+                    name="bot_protection_field"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">First Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/50 transition-all text-sm"
+                      placeholder="First Name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">Last Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/50 transition-all text-sm"
+                      placeholder="Last Name"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">Work Email</label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/50 transition-all text-sm"
+                    placeholder="Work Email"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">Organization / Industry</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.organization}
+                    onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/50 transition-all text-sm"
+                    placeholder="Organization / Industry"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">Inquiry Type</label>
+                  <select
+                    value={formData.inquiryType}
+                    onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/50 transition-all text-sm cursor-pointer"
+                  >
+                    <option value="Investor Interest" className="bg-[#0a0a0a] text-white">Investor Interest</option>
+                    <option value="Enterprise" className="bg-[#0a0a0a] text-white">Enterprise</option>
+                    <option value="Private Hospital" className="bg-[#0a0a0a] text-white">Private Hospital</option>
+                    <option value="Organistion" className="bg-[#0a0a0a] text-white">Organistion</option>
+                  </select>
+                </div>
+
+                {/* Interactive Math Challenge Captcha Shield */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-semibold uppercase text-slate-400 tracking-wider flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-brand-blue" />
+                      Anti-Spam Verification
+                    </span>
+                    <button
+                      type="button"
+                      onClick={generateCaptcha}
+                      className="text-slate-400 hover:text-white transition-colors text-xs flex items-center gap-1"
+                    >
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                      Refresh
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-sm font-bold text-white bg-slate-800/80 border border-white/15 px-4 py-2.5 rounded-lg tracking-wider font-mono">
+                      {captchaNum1} + {captchaNum2} =
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={userCaptchaAnswer}
+                      onChange={(e) => {
+                        setUserCaptchaAnswer(e.target.value);
+                        if (captchaError) setCaptchaError(false);
+                      }}
+                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/50 transition-all text-sm font-mono"
+                      placeholder="Calculate"
+                    />
+                  </div>
+                  {captchaError && (
+                    <p className="text-xs text-red-400 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" /> Incorrect verification answer. Please try again.
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-4 rounded-xl bg-white text-dark-bg font-bold hover:bg-brand-blue hover:text-white transition-all text-sm tracking-wide"
+                >
+                  Send Request
+                </button>
+              </form>
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="h-full flex flex-col justify-center items-center text-center p-6 space-y-4"
+              >
+                <div className="w-16 h-16 rounded-full bg-brand-blue/20 flex items-center justify-center text-brand-blue mb-2">
+                  <CheckCircle2 className="w-8 h-8" />
+                </div>
+                <h4 className="text-2xl font-bold text-white">Inquiry Forwarded</h4>
+                <p className="text-slate-400 max-w-sm text-sm">
+                  Thank you, <strong>{formData.firstName}</strong>. Your <strong>{formData.inquiryType}</strong> request has been successfully dispatched directly to <strong className="text-white">info@kairomics.com</strong>.
+                </p>
+                <button
+                  onClick={() => {
+                    setFormData({ firstName: "", lastName: "", email: "", organization: "", inquiryType: "Investor Interest" });
+                    generateCaptcha();
+                    setSubmitted(false);
+                  }}
+                  className="text-brand-blue hover:text-white text-xs font-semibold transition-colors mt-6 pt-2"
+                >
+                  Submit Another Inquiry
+                </button>
+              </motion.div>
+            )}
           </div>
         </div>
 
@@ -817,7 +938,6 @@ export default function App() {
         <Pathway />
         <Technology />
         <Impact />
-        <Market />
         <Team />
       </main>
       <Footer />
