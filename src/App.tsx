@@ -228,7 +228,7 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-  const fullText = "Intelligence in Every Phase of Patient Pathway";
+  const fullText = "Intelligence in Every Phase of Oncology Care";
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
@@ -256,16 +256,17 @@ const Hero = () => {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 text-center">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-brand-blue text-xs font-bold tracking-widest uppercase mb-6">
             THE FUTURE OF CANCER PATIENT PATHWAY INTELLIGENCE
           </span>
-          <h1 className="text-5xl md:text-8xl font-bold tracking-tight text-white mb-8 leading-[1.1] min-h-[120px] md:min-h-[192px]">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl font-serif font-normal tracking-tight text-white mb-6 leading-[1.12] min-h-[150px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[220px] xl:min-h-[240px]">
             {displayedPrefix}
             {displayedHighlight && <span className="gradient-text">{displayedHighlight}</span>}
             <motion.span 
@@ -274,14 +275,14 @@ const Hero = () => {
               className="inline-block w-[0.1em] h-[1em] bg-white translate-y-[0.1em] ml-1"
             />
           </h1>
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-12 leading-relaxed">
+          <p className="max-w-xl text-md md:text-lg text-slate-400 mb-8 leading-relaxed">
             The world's first end-to-end AI platform that synthesizes every disparate data point into precise, actionable intelligence.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full brand-gradient-bg text-dark-bg font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group">
+          <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
+            <button className="w-full sm:w-auto px-8 py-4 rounded-full brand-gradient-bg text-dark-bg font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group whitespace-nowrap">
               Explore the Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all">
+            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all whitespace-nowrap">
               Watch Demo
             </button>
           </div>
@@ -292,9 +293,9 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.9, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="mt-20 relative"
+          className="lg:col-span-6 relative w-full flex justify-center"
         >
-          <div className="relative mx-auto max-w-5xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-dark-card/50 backdrop-blur-sm p-2">
+          <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-dark-card/50 backdrop-blur-sm p-1.5">
             <img 
               src="/regenerated_image_1777502077226.png" 
               alt="KAIROMICS Dashboard" 
@@ -304,7 +305,7 @@ const Hero = () => {
             <div className="absolute inset-0 bg-linear-to-t from-dark-bg via-transparent to-transparent" />
             
             {/* Floating Stats */}
-            <div className="absolute top-1/4 -left-10 hidden lg:block">
+            <div className="absolute top-1/4 -left-6 hidden xl:block">
               <motion.div 
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
@@ -322,7 +323,7 @@ const Hero = () => {
               </motion.div>
             </div>
 
-            <div className="absolute bottom-1/4 -right-10 hidden lg:block">
+            <div className="absolute bottom-1/4 -right-6 hidden xl:block">
               <motion.div 
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 5, repeat: Infinity }}
@@ -360,7 +361,7 @@ const Problem = () => {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-brand-blue text-sm font-bold tracking-widest uppercase mb-4">The Challenge</h2>
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+            <h3 className="text-4xl md:text-5xl font-serif font-normal text-white mb-8 leading-tight">
               Cancer Care is <span className="text-red-500">Broken</span>, Delayed, and Data-Poor
             </h3>
             <div className="space-y-6">
@@ -406,7 +407,7 @@ const Vision = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-brand-blue text-sm font-bold tracking-widest uppercase mb-4">The Vision</h2>
-          <h3 className="text-4xl md:text-6xl font-bold text-white mb-8">One Platform to Unite Cancer Care</h3>
+          <h3 className="text-4xl md:text-6xl font-serif font-normal text-white mb-8">One Platform to Unite Cancer Care</h3>
           <p className="max-w-3xl mx-auto text-xl text-slate-400 italic">
             "To synthesize every disparate data point into precise, actionable intelligence—creating a unified pathway that empowers clinicians and transforms cancer survival."
           </p>
@@ -468,7 +469,7 @@ const Pathway = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-brand-blue text-sm font-bold tracking-widest uppercase mb-4">End-to-End</h2>
-          <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">The KAIROMICS Cancer Care Pathway</h3>
+          <h3 className="text-4xl md:text-5xl font-serif font-normal text-white mb-6">The KAIROMICS Cancer Care Pathway</h3>
           <p className="text-slate-400 max-w-2xl mx-auto">Eliminating data silos to deliver one continuous patient journey across all modalities.</p>
         </div>
 
@@ -559,7 +560,7 @@ const Technology = () => {
 
           <div>
             <h2 className="text-brand-blue text-sm font-bold tracking-widest uppercase mb-4">Technology</h2>
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-8">Built for Clinical-Grade Oncology</h3>
+            <h3 className="text-4xl md:text-5xl font-serif font-normal text-white mb-8">Built for Clinical-Grade Oncology</h3>
             <div className="space-y-8">
               {[
                 { title: "Data Ingestion Layer", desc: "DICOM, HL7 FHIR, EHR APIs, lab systems, and pathology ingested automatically.", icon: Database },
@@ -598,7 +599,7 @@ const Impact = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-brand-blue text-sm font-bold tracking-widest uppercase mb-4">Clinical Impact</h2>
-          <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">Measurable Outcomes Across the Pathway</h3>
+          <h3 className="text-4xl md:text-5xl font-serif font-normal text-white mb-6">Measurable Outcomes Across the Pathway</h3>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
@@ -655,7 +656,7 @@ const Team = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-brand-blue text-sm font-bold tracking-widest uppercase mb-4">The Team</h2>
-          <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">World-Class Expertise</h3>
+          <h3 className="text-4xl md:text-5xl font-serif font-normal text-white mb-6">World-Class Expertise</h3>
           <p className="text-slate-400 max-w-2xl mx-auto">Combining clinical excellence, AI innovation, and commercial scale.</p>
         </div>
 
@@ -757,7 +758,7 @@ const Footer = () => {
             {!submitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <h4 className="text-2xl font-bold text-white mb-2">Enterprise Inquiry</h4>
+                  <h4 className="text-2xl font-serif font-normal text-white mb-2">Enterprise and Investors Inquiry</h4>
                   <p className="text-slate-400 text-sm">
                     Directing inquiries to <span className="text-brand-blue font-semibold">info@kairomics.com</span>. Our partnerships advisor will respond within 24 hours.
                   </p>
