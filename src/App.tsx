@@ -282,9 +282,14 @@ const Hero = () => {
             <button className="w-full sm:w-auto px-8 py-4 rounded-full brand-gradient-bg text-dark-bg font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group whitespace-nowrap">
               Explore the Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all whitespace-nowrap">
+            <a
+              href="http://demo.kairomics.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all whitespace-nowrap flex items-center justify-center text-center"
+            >
               Watch Demo
-            </button>
+            </a>
           </div>
         </motion.div>
 
