@@ -21,7 +21,17 @@ import {
   Stethoscope,
   ClipboardList,
   MessageSquare,
-  Send
+  Send,
+  Lock,
+  Mail,
+  Phone,
+  User,
+  Briefcase,
+  RefreshCw,
+  KeyRound,
+  ExternalLink,
+  Download,
+  FileSpreadsheet
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
@@ -243,6 +253,100 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [hasRegistered, setHasRegistered] = useState(false);
+  const [regForm, setRegForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    enquiryReason: "Investors",
+    organization: "",
+  });
+  const [captchaCode, setCaptchaCode] = useState({ q: "14 + 7", a: "21" });
+  const [userCaptcha, setUserCaptcha] = useState("");
+  const [captchaError, setCaptchaError] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [regSubmitting, setRegSubmitting] = useState(false);
+  const [regSuccess, setRegSuccess] = useState(false);
+  const [showAdminSync, setShowAdminSync] = useState(false);
+  const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
+
+  const generateNewCaptcha = () => {
+    const n1 = Math.floor(Math.random() * 15) + 5;
+    const n2 = Math.floor(Math.random() * 9) + 2;
+    setCaptchaCode({ q: `${n1} + ${n2}`, a: String(n1 + n2) });
+    setUserCaptcha("");
+    setCaptchaError(false);
+  };
+
+  const handleOpenDemoFlow = () => {
+    if (hasRegistered) {
+      // If already registered in session, still allow re-viewing or direct launch
+      window.open("http://demo.kairomics.com/", "_blank", "noopener,noreferrer");
+      return;
+    }
+    generateNewCaptcha();
+    setEmailError("");
+    setCaptchaError(false);
+    setIsRegisterOpen(true);
+  };
+
+  const handleFetchRegistrations = async () => {
+    try {
+      const res = await fetch("/api/registrations");
+      const data = await res.json();
+      setAllRegistrations(data.data || []);
+      setShowAdminSync(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailError("");
+    setCaptchaError(false);
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(regForm.email)) {
+      setEmailError("Please provide a valid business or institutional email address.");
+      return;
+    }
+
+    // Validate captcha
+    if (userCaptcha.trim() !== captchaCode.a) {
+      setCaptchaError(true);
+      return;
+    }
+
+    setRegSubmitting(true);
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...regForm,
+          captchaAnswer: userCaptcha,
+          captchaExpected: captchaCode.a
+        })
+      });
+
+      const resData = await response.json();
+      if (!response.ok) {
+        throw new Error(resData.error || "Registration failed");
+      }
+
+      setRegSuccess(true);
+      setHasRegistered(true);
+    } catch (err: any) {
+      alert(err.message || "Failed to submit registration.");
+    } finally {
+      setRegSubmitting(false);
+    }
+  };
+
   const prefix = "Intelligence in Every ";
   const displayedPrefix = displayedText.slice(0, prefix.length);
   const displayedHighlight = displayedText.slice(prefix.length);
@@ -279,17 +383,30 @@ const Hero = () => {
             The world's first end-to-end AI platform that synthesizes every disparate data point into precise, actionable intelligence.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full brand-gradient-bg text-dark-bg font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group whitespace-nowrap">
-              Explore the Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <a
-              href="http://demo.kairomics.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all whitespace-nowrap flex items-center justify-center text-center"
+            <a 
+              href="#problem"
+              className="w-full sm:w-auto px-8 py-4 rounded-full brand-gradient-bg text-dark-bg font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group whitespace-nowrap"
             >
-              Watch Demo
+              Explore the Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
+            
+            <button
+              onClick={handleOpenDemoFlow}
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-brand-blue/30 text-white font-bold text-lg hover:bg-brand-blue/20 hover:border-brand-blue transition-all whitespace-nowrap flex items-center justify-center gap-2 text-center shadow-lg group cursor-pointer"
+            >
+              <Lock className="w-4 h-4 text-brand-blue group-hover:scale-110 transition-transform" />
+              Watch Demo
+            </button>
+          </div>
+
+          <div className="mt-4 flex items-center gap-3 text-xs text-slate-400">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-brand-green" /> Bot-protected portal
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <Mail className="w-4 h-4 text-brand-blue" /> Dispatched to john.m@kairomics.com
+            </span>
           </div>
         </motion.div>
 
@@ -348,6 +465,371 @@ const Hero = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Registration Portal Modal */}
+      <AnimatePresence>
+        {isRegisterOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-dark-bg/85 backdrop-blur-md overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 20 }}
+              className="relative w-full max-w-xl bg-dark-card border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden my-8"
+            >
+              {/* Glow accent */}
+              <div className="absolute top-0 right-0 w-48 h-48 bg-brand-blue/20 blur-3xl pointer-events-none -mr-16 -mt-16 rounded-full" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-brand-green/20 blur-3xl pointer-events-none -ml-16 -mb-16 rounded-full" />
+
+              <button
+                onClick={() => {
+                  setIsRegisterOpen(false);
+                  setRegSuccess(false);
+                }}
+                className="absolute top-6 right-6 p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {!regSuccess ? (
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-xl brand-gradient-bg flex items-center justify-center text-dark-bg">
+                      <KeyRound className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-bold tracking-widest text-brand-blue uppercase">Access Authorization</span>
+                      <h3 className="text-2xl font-serif font-bold text-white">Kairomics Portal Registration</h3>
+                    </div>
+                  </div>
+
+                  <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+                    Please authenticate your professional profile to unlock the interactive oncology platform demo. Your inquiry will be registered and notified directly to <span className="text-brand-blue font-semibold">john.m@kairomics.com</span>.
+                  </p>
+
+                  <form onSubmit={handleRegisterSubmit} className="space-y-4">
+                    {/* Full Name */}
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-brand-blue" /> Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={regForm.fullName}
+                        onChange={(e) => setRegForm({ ...regForm, fullName: e.target.value })}
+                        placeholder="Dr. Jane Doe / John Smith"
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-sm transition-all"
+                      />
+                    </div>
+
+                    {/* Email & Phone Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5 text-brand-blue" /> Work Email *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={regForm.email}
+                          onChange={(e) => {
+                            setRegForm({ ...regForm, email: e.target.value });
+                            setEmailError("");
+                          }}
+                          placeholder="name@institution.com"
+                          className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${emailError ? 'border-red-500' : 'border-white/10'} text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-sm transition-all`}
+                        />
+                        {emailError && (
+                          <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" /> {emailError}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Phone className="w-3.5 h-3.5 text-brand-blue" /> Phone Number *
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={regForm.phone}
+                          onChange={(e) => setRegForm({ ...regForm, phone: e.target.value })}
+                          placeholder="+1 (555) 000-0000"
+                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-sm transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Organization & Password */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Briefcase className="w-3.5 h-3.5 text-brand-blue" /> Institution / Company
+                        </label>
+                        <input
+                          type="text"
+                          value={regForm.organization}
+                          onChange={(e) => setRegForm({ ...regForm, organization: e.target.value })}
+                          placeholder="Hospital, Fund, or Lab"
+                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-sm transition-all"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Lock className="w-3.5 h-3.5 text-brand-blue" /> Portal Password *
+                        </label>
+                        <input
+                          type="password"
+                          required
+                          minLength={6}
+                          value={regForm.password}
+                          onChange={(e) => setRegForm({ ...regForm, password: e.target.value })}
+                          placeholder="••••••••••••"
+                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-sm transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Enquiry Reason Selection Box */}
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                        <span>Why are you requesting access? *</span>
+                        <span className="text-[11px] text-brand-blue font-normal">Select Enquiring Role</span>
+                      </label>
+                      <select
+                        value={regForm.enquiryReason}
+                        onChange={(e) => setRegForm({ ...regForm, enquiryReason: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-dark-bg border border-white/15 text-white focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-sm transition-all cursor-pointer"
+                      >
+                        <option value="Investors">Investors</option>
+                        <option value="Healthcare Company Representative">Healthcare Company Representative</option>
+                        <option value="Researcher">Researcher</option>
+                        <option value="Career Seeker">Career Seeker</option>
+                        <option value="Business Partner">Business Partner</option>
+                      </select>
+                    </div>
+
+                    {/* Bot CAPTCHA Security Verification */}
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                          <ShieldCheck className="w-4 h-4 text-brand-green" /> Bot Captcha Security *
+                        </span>
+                        <button
+                          type="button"
+                          onClick={generateNewCaptcha}
+                          className="text-xs text-brand-blue hover:text-white flex items-center gap-1 transition-colors"
+                        >
+                          <RefreshCw className="w-3 h-3" /> Refresh
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="px-4 py-2.5 rounded-xl bg-brand-blue/10 border border-brand-blue/30 text-brand-blue font-mono font-bold text-base tracking-wider select-none">
+                          {captchaCode.q} = ?
+                        </div>
+                        <input
+                          type="text"
+                          required
+                          value={userCaptcha}
+                          onChange={(e) => {
+                            setUserCaptcha(e.target.value);
+                            setCaptchaError(false);
+                          }}
+                          placeholder="Enter answer"
+                          className={`flex-1 px-4 py-2.5 rounded-xl bg-white/5 border ${captchaError ? 'border-red-500' : 'border-white/10'} text-white placeholder-slate-500 focus:outline-none focus:border-brand-blue text-sm transition-all`}
+                        />
+                      </div>
+                      {captchaError && (
+                        <p className="text-xs text-red-400 flex items-center gap-1 mt-1">
+                          <AlertCircle className="w-3.5 h-3.5" /> Incorrect captcha math solution. Please verify you are human.
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      disabled={regSubmitting}
+                      className="w-full py-4 rounded-xl brand-gradient-bg text-dark-bg font-bold hover:shadow-[0_0_25px_rgba(0,210,255,0.4)] transition-all text-sm tracking-wide flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    >
+                      {regSubmitting ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 animate-spin" /> Verifying & Registering...
+                        </>
+                      ) : (
+                        <>
+                          Complete Registration & Launch Demo <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+
+                    <div className="flex items-center justify-between pt-2 text-[11px] text-slate-500">
+                      <span>Encrypted SSL 256-bit submission</span>
+                      <span>Records saved to database</span>
+                    </div>
+                  </form>
+                </div>
+              ) : (
+                /* Success Screen with Immediate Access to Demo */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-6 flex flex-col items-center text-center space-y-4"
+                >
+                  <div className="w-16 h-16 rounded-full bg-brand-green/20 border border-brand-green/40 flex items-center justify-center text-brand-green mb-2">
+                    <CheckCircle2 className="w-9 h-9" />
+                  </div>
+                  <h4 className="text-2xl font-serif font-bold text-white">Registration Verified</h4>
+                  <p className="text-slate-300 max-w-md text-sm leading-relaxed">
+                    Welcome, <strong className="text-white">{regForm.fullName}</strong>. Your inquiry as a <strong className="text-brand-blue">{regForm.enquiryReason}</strong> has been logged to the database and forwarded to <strong className="text-white">john.m@kairomics.com</strong>.
+                  </p>
+
+                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 w-full text-left space-y-1.5 text-xs text-slate-400">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Registered Email:</span>
+                      <span className="text-white font-medium">{regForm.email}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Phone:</span>
+                      <span className="text-white font-medium">{regForm.phone}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Role / Reason:</span>
+                      <span className="text-brand-blue font-medium">{regForm.enquiryReason}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Data Stored & Routed To:</span>
+                      <span className="text-white font-medium">Database & john.m@kairomics.com</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 w-full space-y-3">
+                    <a
+                      href="http://demo.kairomics.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-4 rounded-xl brand-gradient-bg text-dark-bg font-bold text-base hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                    >
+                      Proceed to Live Demo (http://demo.kairomics.com/) <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+
+                    <div className="flex items-center justify-center gap-4 text-xs pt-2">
+                      <button
+                        onClick={handleFetchRegistrations}
+                        className="text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <FileSpreadsheet className="w-3.5 h-3.5 text-brand-green" /> View Stored Records / Google Sheets Sync
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Admin / Google Sheets Database Sync Drawer */}
+      <AnimatePresence>
+        {showAdminSync && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-dark-bg/90 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-3xl bg-dark-card border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-brand-green/20 text-brand-green flex items-center justify-center">
+                    <FileSpreadsheet className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Registered Portal Database</h3>
+                    <p className="text-xs text-slate-400">
+                      Dispatched to <span className="text-brand-blue">john.m@kairomics.com</span> • Sync with Google Sheets / Google Drive
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowAdminSync(false)}
+                  className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="py-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+                <span>Total Registrations: <strong className="text-white">{allRegistrations.length}</strong></span>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="/api/registrations/export-csv"
+                    download
+                    className="px-4 py-2 rounded-lg bg-brand-green/20 hover:bg-brand-green/30 text-brand-green border border-brand-green/40 font-semibold flex items-center gap-2 transition-colors"
+                  >
+                    <Download className="w-3.5 h-3.5" /> Export for Google Sheets (CSV)
+                  </a>
+                  <button
+                    onClick={handleFetchRegistrations}
+                    className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center gap-1 transition-colors"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" /> Refresh
+                  </button>
+                </div>
+              </div>
+
+              {/* Data Table */}
+              <div className="flex-1 overflow-y-auto rounded-xl border border-white/10 bg-black/40">
+                <table className="w-full text-left text-xs text-slate-300">
+                  <thead className="bg-white/5 text-slate-400 font-semibold uppercase tracking-wider border-b border-white/10 sticky top-0 backdrop-blur-md">
+                    <tr>
+                      <th className="p-3">Name</th>
+                      <th className="p-3">Email</th>
+                      <th className="p-3">Phone</th>
+                      <th className="p-3">Enquiring As</th>
+                      <th className="p-3">Organization</th>
+                      <th className="p-3">Notification</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {allRegistrations.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center text-slate-500">
+                          No registrations stored yet. Submit the registration form above to see entries.
+                        </td>
+                      </tr>
+                    ) : (
+                      allRegistrations.map((item, idx) => (
+                        <tr key={item.id || idx} className="hover:bg-white/5 transition-colors">
+                          <td className="p-3 font-medium text-white">{item.fullName}</td>
+                          <td className="p-3 text-brand-blue">{item.email}</td>
+                          <td className="p-3 font-mono">{item.phone}</td>
+                          <td className="p-3">
+                            <span className="px-2 py-0.5 rounded-full bg-brand-blue/15 text-brand-blue text-[10px] font-semibold">
+                              {item.enquiryReason}
+                            </span>
+                          </td>
+                          <td className="p-3 text-slate-400">{item.organization || "—"}</td>
+                          <td className="p-3 text-slate-500 text-[10px]">
+                            Dispatched to {item.forwardedTo}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="pt-4 text-xs text-slate-400 flex items-center justify-between border-t border-white/10 mt-4">
+                <span>Google Drive / Sheets instructions: Click "Export for Google Sheets (CSV)", open Google Sheets, and click File &gt; Import.</span>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
