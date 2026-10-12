@@ -398,16 +398,6 @@ const Hero = () => {
               Watch Demo
             </button>
           </div>
-
-          <div className="mt-4 flex items-center gap-3 text-xs text-slate-400">
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-brand-green" /> Bot-protected portal
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1.5">
-              <Mail className="w-4 h-4 text-brand-blue" /> Dispatched to john.m@kairomics.com
-            </span>
-          </div>
         </motion.div>
 
         {/* Hero Visual */}
